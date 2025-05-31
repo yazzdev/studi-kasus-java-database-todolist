@@ -18,6 +18,7 @@
   2. Tambahkan dependency yang diperlukan (Bisa dicari di Search Maven)
     - junit-jupiter (jangan lupa scope nya test)
     - mysql-connector-java
+  3. Tambahkan hikaricp (dari github)
   -->
 
   <properties>
@@ -37,6 +38,11 @@
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>8.0.33</version>
+    </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>6.3.0</version>
     </dependency>
   </dependencies>
 

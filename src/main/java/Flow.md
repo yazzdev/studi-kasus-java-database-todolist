@@ -14,12 +14,13 @@
 ```
 ### 2. Membuat koneksi database
 ```
-    1. Create package : util
-    2. Create file : DatabaseUtil
-    3. Create same package and file in test scope
+    a. Create package : util
+    b. Create file : DatabaseUtil
+    c. Create same package and file in test scope
 ```
 ### 3. Membuat package di java -> repository
 ```
-    1. Create file : TodoListRepository (interface)
-    2. Create file : TodoListRepositoryImpl (class)
+    a. Create file : TodoListRepository (interface)
+    b. Create file : TodoListRepositoryImpl (class)
+    c. Create Testing
 ```

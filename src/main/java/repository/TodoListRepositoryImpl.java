@@ -2,16 +2,27 @@ package repository;
 
 import entity.Todolist;
 
-public class TodoListRepositoryImpl implements TodoListRepository{
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class TodoListRepositoryImpl implements TodoListRepository {
 
   public Todolist[] data = new Todolist[10];
+
+  private DataSource dataSource;
+
+  public TodoListRepositoryImpl(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
 
   @Override
   public Todolist[] getAll() {
     return data;
   }
 
-  public boolean isFull(){
+  public boolean isFull() {
     // Cek apakah model penuh?
     var isFull = true;
     for (var i = 0; i < data.length; i++) {
@@ -24,7 +35,7 @@ public class TodoListRepositoryImpl implements TodoListRepository{
     return isFull;
   }
 
-  public void resizeIfFull(){
+  public void resizeIfFull() {
     // Jika penuh, resize ukuran array menjadi 2x lipat
     if (isFull()) {
       var temp = data;
@@ -38,15 +49,15 @@ public class TodoListRepositoryImpl implements TodoListRepository{
 
   @Override
   public void add(Todolist todolist) {
+    String sql = "INSERT INTO todolist(todo) VALUES (?)";
+    try (Connection connection = dataSource.getConnection();
+         PreparedStatement statement = connection.prepareStatement(sql)) {
 
-    resizeIfFull();
+      statement.setString(1, todolist.getTodo());
+      statement.executeUpdate();
 
-    // Tambahkan  ke posisi yang data array nya kosong/NULL
-    for (var i = 0; i < data.length; i++) {
-      if (data[i] == null) {
-        data[i] = todolist;
-        break;
-      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
     }
   }
 

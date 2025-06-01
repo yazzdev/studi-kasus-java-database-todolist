@@ -83,7 +83,7 @@ public class TodoListRepositoryImpl implements TodoListRepository {
 
   @Override
   public boolean remove(Integer number) {
-    if (isExists()){
+    if (isExists(number)){
       String sql = "DELETE FROM todolist WHERE id = ?";
       // Try with resource (Biar auto close)
       try (Connection connection = dataSource.getConnection();

@@ -17,13 +17,8 @@ public class TodoListServiceImpl implements TodoListService {
 
     System.out.println("----------------");
     System.out.println(">>> TODOLIST <<<");
-    for (var i = 0; i < model.length; i++) {
-      var todolist = model[i];
-      var no = i + 1;
-
-      if (todolist != null) {
-        System.out.println(no + ". " + todolist.getTodo());
-      }
+    for(var todo : model){
+      System.out.println(todo.getId() + " : " + todo.getTodo());
     }
   }
 

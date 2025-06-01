@@ -5,6 +5,7 @@ import entity.Todolist;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TodoListRepositoryImpl implements TodoListRepository {
@@ -61,21 +62,41 @@ public class TodoListRepositoryImpl implements TodoListRepository {
     }
   }
 
-  @Override
-  public boolean remove(Integer number) {
-    if ((number - 1) >= data.length) {
-      return false;
-    } else if (data[number - 1] == null) {
-      return false;
-    } else {
-      for (int i = (number - 1); i < data.length; i++) {
-        if (i == (data.length - 1)) {
-          data[i] = null;
+  private boolean isExists(Integer number){
+    String sql = "SELECT * FROM todolist WHERE id = ?";
+    try (Connection connection = dataSource.getConnection();
+    PreparedStatement statement = connection.prepareStatement(sql)) {
+      statement.setInt(1, number);
+
+      try(ResultSet resultSet = statement.executeQuery()){
+        if (resultSet.next()){
+          return true;
         } else {
-          data[i] = data[i + 1];
+          return false;
         }
       }
-      return true;
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+
+  }
+
+  @Override
+  public boolean remove(Integer number) {
+    if (isExists()){
+      String sql = "DELETE FROM todolist WHERE id = ?";
+      // Try with resource (Biar auto close)
+      try (Connection connection = dataSource.getConnection();
+           PreparedStatement statement = connection.prepareStatement(sql)) {
+        statement.setInt(1, number);
+        statement.executeUpdate();
+
+        return true;
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      }
+    } else {
+      return false;
     }
   }
 }
